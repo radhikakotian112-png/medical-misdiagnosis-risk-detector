@@ -1,0 +1,869 @@
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar {
+  height: 88px;
+
+  padding: 0 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,0.96),
+      rgba(239,252,250,0.96)
+    );
+
+  border-bottom:
+    1px solid rgba(16,160,145,0.15);
+
+  box-shadow:
+    0 8px 30px rgba(20,70,90,0.07);
+
+  z-index: 10;
+}
+
+
+/* =====================================================
+   DECORATIVE BACKGROUND
+===================================================== */
+
+.navbar::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 450px;
+
+  height: 450px;
+
+  right: -200px;
+
+  top: -300px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(29,210,185,0.12),
+      transparent 65%
+    );
+
+  animation:
+    backgroundFloat 8s ease-in-out infinite;
+}
+
+
+.navbar::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 350px;
+
+  height: 350px;
+
+  left: 20%;
+
+  bottom: -330px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(70,140,255,0.08),
+      transparent 65%
+    );
+
+  animation:
+    backgroundFloat 10s ease-in-out infinite reverse;
+}
+
+
+/* =====================================================
+   BRAND
+===================================================== */
+
+.navbar-brand {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+
+.brand-text h2 {
+
+  margin: 0;
+
+  font-size: 21px;
+
+  font-weight: 700;
+
+  color: #19324d;
+
+  letter-spacing: -0.4px;
+}
+
+
+.brand-text p {
+
+  margin: 5px 0 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 12px;
+
+  color: #718096;
+}
+
+
+/* =====================================================
+   MEDICAL LOGO
+===================================================== */
+
+.medical-logo {
+
+  width: 62px;
+
+  height: 62px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  perspective: 800px;
+}
+
+
+/* =====================================================
+   MAIN ICON
+===================================================== */
+
+.main-medical-icon {
+
+  width: 45px;
+
+  height: 45px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 15px;
+
+  position: relative;
+
+  z-index: 5;
+
+  font-size: 23px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      145deg,
+      #38d6c0,
+      #079985
+    );
+
+  box-shadow:
+
+    0 8px 0 #067465,
+
+    0 12px 25px
+      rgba(0,160,140,0.30),
+
+    inset
+      3px 3px 7px
+      rgba(255,255,255,0.45),
+
+    inset
+      -4px -4px 7px
+      rgba(0,0,0,0.12);
+
+  animation:
+    iconFloat 3s ease-in-out infinite;
+}
+
+
+/* =====================================================
+   ROTATING ORBITS
+===================================================== */
+
+.orbit {
+
+  position: absolute;
+
+  border: 1px solid;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+
+.orbit-one {
+
+  width: 58px;
+
+  height: 32px;
+
+  border-color:
+    rgba(15,180,160,0.45);
+
+  transform:
+    rotateX(65deg)
+    rotateZ(15deg);
+
+  animation:
+    orbitRotate 4s linear infinite;
+}
+
+
+.orbit-two {
+
+  width: 32px;
+
+  height: 58px;
+
+  border-color:
+    rgba(50,140,255,0.3);
+
+  transform:
+    rotateY(65deg)
+    rotateZ(-15deg);
+
+  animation:
+    orbitRotateReverse 5s linear infinite;
+}
+
+
+/* =====================================================
+   HEARTBEAT
+===================================================== */
+
+.floating-heart {
+
+  position: absolute;
+
+  width: 22px;
+
+  height: 22px;
+
+  right: -5px;
+
+  bottom: -3px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: white;
+
+  color: #ef5350;
+
+  font-size: 10px;
+
+  z-index: 8;
+
+  box-shadow:
+
+    0 5px 15px
+      rgba(239,83,80,0.3);
+
+  animation:
+    heartbeatAnimation 1.3s ease-in-out infinite;
+}
+
+
+/* =====================================================
+   PARTICLES
+===================================================== */
+
+.particle {
+
+  position: absolute;
+
+  width: 5px;
+
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #20cbb5;
+
+  box-shadow:
+    0 0 10px #20cbb5;
+
+  z-index: 2;
+}
+
+
+.particle-one {
+
+  top: 5px;
+
+  left: 8px;
+
+  animation:
+    particleOne 3s infinite;
+}
+
+
+.particle-two {
+
+  right: 2px;
+
+  top: 18px;
+
+  background: #4c8dff;
+
+  box-shadow:
+    0 0 10px #4c8dff;
+
+  animation:
+    particleTwo 4s infinite;
+}
+
+
+.particle-three {
+
+  left: 3px;
+
+  bottom: 10px;
+
+  animation:
+    particleThree 3.5s infinite;
+}
+
+
+/* =====================================================
+   LIVE STATUS
+===================================================== */
+
+.live-dot {
+
+  width: 7px;
+
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #13b892;
+
+  box-shadow:
+    0 0 8px #13b892;
+
+  animation:
+    livePulse 1.5s infinite;
+}
+
+
+/* =====================================================
+   DOCTOR PROFILE
+===================================================== */
+
+.doctor-profile {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding:
+    6px
+    14px
+    6px
+    7px;
+
+  border-radius: 18px;
+
+  background:
+    rgba(255,255,255,0.72);
+
+  border:
+    1px solid
+    rgba(70,130,200,0.12);
+
+  box-shadow:
+    0 7px 22px
+    rgba(40,80,120,0.08);
+
+  position: relative;
+
+  z-index: 3;
+
+  backdrop-filter: blur(10px);
+}
+
+
+/* =====================================================
+   DOCTOR ANIMATION
+===================================================== */
+
+.doctor-animation {
+
+  width: 48px;
+
+  height: 48px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+.doctor-ring {
+
+  position: absolute;
+
+  width: 47px;
+
+  height: 47px;
+
+  border-radius: 50%;
+
+  border:
+    2px dashed
+    rgba(60,135,235,0.35);
+
+  animation:
+    doctorRingRotate 5s linear infinite;
+}
+
+
+.doctor-icon {
+
+  width: 40px;
+
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: white;
+
+  font-size: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #68bdff,
+      #3976e6
+    );
+
+  box-shadow:
+
+    0 7px 0 #285fc1,
+
+    0 12px 20px
+      rgba(55,120,230,0.25),
+
+    inset
+      3px 3px 6px
+      rgba(255,255,255,0.45);
+
+  z-index: 3;
+
+  animation:
+    doctorFloat 3s ease-in-out infinite;
+}
+
+
+/* =====================================================
+   SHIELD
+===================================================== */
+
+.doctor-shield {
+
+  position: absolute;
+
+  right: -5px;
+
+  bottom: -3px;
+
+  width: 19px;
+
+  height: 19px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: white;
+
+  color: #3976e6;
+
+  font-size: 9px;
+
+  z-index: 6;
+
+  box-shadow:
+    0 3px 9px
+    rgba(50,100,200,0.25);
+
+  animation:
+    shieldPulse 2s infinite;
+}
+
+
+/* =====================================================
+   DOCTOR TEXT
+===================================================== */
+
+.doctor-details h4 {
+
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #263b53;
+}
+
+
+.doctor-details span {
+
+  margin-top: 4px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  font-size: 11px;
+
+  color: #718096;
+}
+
+
+.doctor-details span svg {
+
+  color: #3976e6;
+}
+
+
+/* =====================================================
+   HOVER EFFECT
+===================================================== */
+
+.medical-logo:hover
+.main-medical-icon {
+
+  transform:
+
+    translateZ(25px)
+    rotateY(18deg)
+    rotateX(8deg)
+    scale(1.08);
+
+  box-shadow:
+
+    0 10px 0 #067465,
+
+    0 18px 35px
+      rgba(0,160,140,0.4),
+
+    inset
+      3px 3px 7px
+      rgba(255,255,255,0.5);
+}
+
+
+.medical-logo:hover .orbit-one {
+
+  animation-duration: 1.5s;
+}
+
+
+.medical-logo:hover .orbit-two {
+
+  animation-duration: 2s;
+}
+
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes iconFloat {
+
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotateZ(0);
+  }
+
+  50% {
+    transform:
+      translateY(-6px)
+      rotateZ(2deg);
+  }
+
+}
+
+
+@keyframes orbitRotate {
+
+  from {
+    transform:
+      rotateX(65deg)
+      rotateZ(0deg);
+  }
+
+  to {
+    transform:
+      rotateX(65deg)
+      rotateZ(360deg);
+  }
+
+}
+
+
+@keyframes orbitRotateReverse {
+
+  from {
+    transform:
+      rotateY(65deg)
+      rotateZ(360deg);
+  }
+
+  to {
+    transform:
+      rotateY(65deg)
+      rotateZ(0deg);
+  }
+
+}
+
+
+@keyframes heartbeatAnimation {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  15% {
+    transform: scale(1.3);
+  }
+
+  30% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.2);
+  }
+
+  60% {
+    transform: scale(1);
+  }
+
+}
+
+
+@keyframes livePulse {
+
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.6);
+    opacity: 0.45;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+}
+
+
+@keyframes particleOne {
+
+  0%,
+  100% {
+    transform:
+      translate(0,0);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform:
+      translate(12px,-8px);
+    opacity: 1;
+  }
+
+}
+
+
+@keyframes particleTwo {
+
+  0%,
+  100% {
+    transform:
+      translate(0,0);
+  }
+
+  50% {
+    transform:
+      translate(-9px,10px);
+  }
+
+}
+
+
+@keyframes particleThree {
+
+  0%,
+  100% {
+    transform:
+      translate(0,0);
+  }
+
+  50% {
+    transform:
+      translate(10px,-12px);
+  }
+
+}
+
+
+@keyframes backgroundFloat {
+
+  0%,
+  100% {
+    transform:
+      translate(0,0);
+  }
+
+  50% {
+    transform:
+      translate(30px,20px);
+  }
+
+}
+
+
+@keyframes doctorFloat {
+
+  0%,
+  100% {
+    transform:
+      translateY(0);
+  }
+
+  50% {
+    transform:
+      translateY(-4px);
+  }
+
+}
+
+
+@keyframes doctorRingRotate {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+@keyframes shieldPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.18);
+  }
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 700px) {
+
+  .navbar {
+    height: auto;
+    min-height: 75px;
+    padding: 10px 15px;
+  }
+
+  .brand-text h2 {
+    font-size: 15px;
+  }
+
+  .brand-text p {
+    font-size: 9px;
+  }
+
+  .doctor-details {
+    display: none;
+  }
+
+}

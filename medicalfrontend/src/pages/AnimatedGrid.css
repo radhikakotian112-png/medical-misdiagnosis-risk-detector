@@ -1,0 +1,23 @@
+.grid-container {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 40px);
+  grid-auto-rows: 40px;
+  z-index: 0;
+}
+
+.grid-cell {
+  border: 1px solid rgba(45, 212, 191, 0.12);
+  background: transparent;
+  transition: background-color 60ms linear, transform 60ms linear, box-shadow 60ms linear;
+  will-change: background-color, transform, box-shadow;
+}
+
+.grid-cell:hover {
+  background: #2dd4bf;
+  transform: scale(1.03);
+  box-shadow:
+    0 0 6px #2dd4bf,
+    0 0 14px rgba(45, 212, 191, 0.55);
+}

@@ -1,0 +1,140 @@
+import { useEffect, useState } from "react";
+import "./App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+
+import Dashboard from "./pages/Dashboard";
+import PatientForm from "./pages/PatientForm";
+import PatientHistory from "./pages/PatientHistory";
+import Reports from "./pages/Reports";
+import Alert from "./pages/Alerts";
+import Settings from "./pages/Settings";
+import Login from "./pages/Login";
+import Contact from "./pages/Contact";
+import { getTranslations } from "./translations";
+
+const defaultSettings = {
+  theme: "light",
+  compactMode: false,
+  emailNotifications: true,
+  smsNotifications: false,
+  autoSaveReports: true,
+  language: "English",
+};
+
+function loadSettings() {
+  try {
+    return { ...defaultSettings, ...JSON.parse(localStorage.getItem("medvistaSettings") || "{}") };
+  } catch {
+    return defaultSettings;
+  }
+}
+
+function ProtectedRoute({ children }) {
+  const isAuthenticated = Boolean(localStorage.getItem("accessToken"));
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+}
+
+function App() {
+  const isAuthenticated = Boolean(localStorage.getItem("accessToken"));
+  const [settings, setSettings] = useState(loadSettings);
+  const translations = getTranslations(settings.language);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = settings.theme;
+    document.documentElement.dataset.compact = settings.compactMode ? "true" : "false";
+    localStorage.setItem("medvistaSettings", JSON.stringify(settings));
+  }, [settings]);
+
+  const updateSettings = (changes) => {
+    setSettings((current) => ({ ...current, ...changes }));
+  };
+
+  return (
+    <div className="app">
+      {isAuthenticated && <Sidebar t={translations} />}
+
+      <div className="main">
+        {isAuthenticated && <Navbar t={translations} />}
+
+        <div className="page-content">
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
+
+            <Route
+              path="/login"
+              element={<Login />}
+            />
+
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/patient"
+              element={
+                <ProtectedRoute>
+                  <PatientForm />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/history"
+              element={
+                <ProtectedRoute>
+                  <PatientHistory />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/reports"
+              element={
+                <ProtectedRoute>
+                  <Reports />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/alerts"
+              element={
+                <ProtectedRoute>
+                  <Alert />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <Settings settings={settings} t={translations} onChange={updateSettings} onReset={() => setSettings(defaultSettings)} />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/contact"
+              element={
+                <ProtectedRoute>
+                  <Contact />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;

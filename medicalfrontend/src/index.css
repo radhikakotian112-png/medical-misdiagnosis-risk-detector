@@ -1,0 +1,14 @@
+body{
+margin:0;
+background:#dde4ea;
+}
+
+button{
+font-family:inherit;
+}
+
+input,
+select,
+textarea{
+font-family:inherit;
+}

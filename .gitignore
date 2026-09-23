@@ -1,0 +1,21 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Environment / secrets
+.env
+
+# React / Node
+node_modules/
+dist/
+
+# IDE
+.vscode/
+
+# Medical data
+medicalbackend/medical_records.db
+medicalbackend/uploads/*
+!medicalbackend/uploads/.gitkeep
