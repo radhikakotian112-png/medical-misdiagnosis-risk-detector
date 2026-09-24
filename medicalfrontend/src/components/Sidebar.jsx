@@ -7,7 +7,7 @@ import {
   FaAddressBook,
 } from "react-icons/fa";
 import { FaClockRotateLeft } from "react-icons/fa6";
-import { MdDashboard } from "react-icons/md";
+import { MdAssessment } from "react-icons/md";
 
 function Sidebar({ t }) {
   return (
@@ -37,11 +37,11 @@ function Sidebar({ t }) {
 
       <nav className="sidebar-menu">
 
-        <NavLink to="/dashboard" className="menu-btn">
+        <NavLink to="/dashboard" className="menu-btn" title="Assessment Dashboard">
           <span className="menu-icon">
-            <MdDashboard />
+            <MdAssessment />
           </span>
-          <span>{t.dashboard}</span>
+          <span>Assessment Dashboard</span>
         </NavLink>
 
 

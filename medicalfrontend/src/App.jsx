@@ -13,6 +13,7 @@ import Alert from "./pages/Alerts";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Contact from "./pages/Contact";
+import Home from "./pages/home";
 import { getTranslations } from "./translations";
 
 const defaultSettings = {
@@ -61,7 +62,7 @@ function App() {
 
         <div className="page-content">
           <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={<Home />} />
 
             <Route
               path="/login"
