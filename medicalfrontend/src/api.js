@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(/\/$/, "");
 
 function authHeaders(headers = {}) {
   const token = localStorage.getItem("accessToken");
@@ -6,7 +6,12 @@ function authHeaders(headers = {}) {
 }
 
 async function request(path, options = {}) {
-  const response = await fetch(`${API_URL}${path}`, { ...options, headers: authHeaders(options.headers) });
+  let response;
+  try {
+    response = await fetch(`${API_URL}${path}`, { ...options, headers: authHeaders(options.headers) });
+  } catch {
+    throw new Error(`Cannot reach the API at ${API_URL}. Check VITE_API_URL and the backend deployment.`);
+  }
   if (response.status === 401) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("loggedIn");
@@ -15,111 +20,25 @@ async function request(path, options = {}) {
 }
 
 export async function login(email, password) {
-  const response = await request("/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
+  const response = await request("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.detail || "Invalid email or password");
   return data;
 }
 
 export async function register(email, password) {
-  const response = await request("/api/auth/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
+  const response = await request("/api/auth/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.detail || "Could not create account");
   return data;
 }
 
-export async function createPatient(patient) {
-  const response = await request("/api/patients", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(patient),
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.detail || "Could not save patient assessment");
-  }
-
-  return response.json();
-}
-
-export async function getPatients() {
-  const response = await request("/api/patients");
-  if (!response.ok) throw new Error("Could not load patient assessments");
-  return response.json();
-}
-
-export async function getPatient(id) {
-  const response = await request(`/api/patients/${id}`);
-  if (!response.ok) throw new Error("Could not load patient assessment");
-  return response.json();
-}
-
-export async function updatePatient(id, patient) {
-  const response = await request(`/api/patients/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(patient),
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.detail || "Could not update patient assessment");
-  }
-
-  return response.json();
-}
-
-export async function deletePatient(id) {
-  const response = await request(`/api/patients/${id}`, {
-    method: "DELETE",
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.detail || "Could not delete patient assessment");
-  }
-}
-
-export async function getStatistics() {
-  const response = await request("/api/statistics");
-  if (!response.ok) throw new Error("Could not load statistics");
-  return response.json();
-}
-
-export async function uploadDocument(file) {
-  const formData = new FormData();
-  formData.append("file", file);
-  const response = await request("/api/documents", {
-    method: "POST",
-    body: formData,
-  });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.detail || "Could not upload medical document");
-  return data;
-}
-
-export async function predictRisk(patientData) {
-  const response = await request("/api/predict-risk", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(patientData),
-  });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.detail || "Could not generate prediction");
-  return data;
-}
-
-export async function getModelStatus() {
-  const response = await request("/api/model-status");
-  if (!response.ok) throw new Error("Could not check model status");
-  return response.json();
-}
+export async function createPatient(patient) { const r = await request("/api/patients", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patient) }); if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || "Could not save patient assessment"); return r.json(); }
+export async function getPatients() { const r = await request("/api/patients"); if (!r.ok) throw new Error("Could not load patient assessments"); return r.json(); }
+export async function getPatient(id) { const r = await request(`/api/patients/${id}`); if (!r.ok) throw new Error("Could not load patient assessment"); return r.json(); }
+export async function updatePatient(id, patient) { const r = await request(`/api/patients/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patient) }); if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || "Could not update patient assessment"); return r.json(); }
+export async function deletePatient(id) { const r = await request(`/api/patients/${id}`, { method: "DELETE" }); if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || "Could not delete patient assessment"); }
+export async function getStatistics() { const r = await request("/api/statistics"); if (!r.ok) throw new Error("Could not load statistics"); return r.json(); }
+export async function uploadDocument(file) { const formData = new FormData(); formData.append("file", file); const r = await request("/api/documents", { method: "POST", body: formData }); const data = await r.json().catch(() => ({})); if (!r.ok) throw new Error(data.detail || "Could not upload medical document"); return data; }
+export async function predictRisk(patientData) { const r = await request("/api/predict-risk", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patientData) }); const data = await r.json().catch(() => ({})); if (!r.ok) throw new Error(data.detail || "Could not generate prediction"); return data; }
+export async function getModelStatus() { const r = await request("/api/model-status"); if (!r.ok) throw new Error("Could not check model status"); return r.json(); }
