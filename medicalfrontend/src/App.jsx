@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Routes, Route, Navigate } from "react-router-dom";
+import {import { Routes, Route, Navigate, useLocation } from "react-router-dom";} from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
@@ -43,6 +43,14 @@ function App() {
   const [settings, setSettings] = useState(loadSettings);
   const translations = getTranslations(settings.language);
 
+  const location = useLocation();
+
+const showAppLayout =
+  isAuthenticated &&
+  location.pathname !== "/" &&
+  location.pathname !== "/login";
+
+
   useEffect(() => {
     document.documentElement.dataset.theme = settings.theme;
     document.documentElement.dataset.compact = settings.compactMode ? "true" : "false";
@@ -55,10 +63,9 @@ function App() {
 
   return (
     <div className="app">
-      {isAuthenticated && <Sidebar t={translations} />}
-
+{showAppLayout && <Sidebar t={translations} />}
       <div className="main">
-        {isAuthenticated && <Navbar t={translations} />}
+        {showAppLayout && <Navbar t={translations} />} && <Navbar t={translations} />}
 
         <div className="page-content">
           <Routes>
