@@ -2,7 +2,15 @@ const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:8000").replac
 
 function authHeaders(headers = {}) {
   const token = localStorage.getItem("accessToken");
-  return token ? { ...headers, Authorization: `Bearer ${token}` } : headers;
+
+  const nextHeaders = {
+    ...headers,
+    "ngrok-skip-browser-warning": "1",
+  };
+
+  return token
+    ? { ...nextHeaders, Authorization: `Bearer ${token}` }
+    : nextHeaders;
 }
 
 async function request(path, options = {}) {
