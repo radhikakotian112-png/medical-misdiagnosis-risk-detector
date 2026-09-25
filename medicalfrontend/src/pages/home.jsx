@@ -1,70 +1,258 @@
-import { ArrowRight, Gavel, HeartPulse, ShieldCheck, Users } from "lucide-react";
+import { Activity, Brain, ShieldCheck, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import "../home.css";
 
-const attorneys = [
-	["Boyd F. Hovde", "https://www.hovdelaw.com/attorney/hovde-f-boyd/"],
-	["Robert T. Dassow", "https://www.hovdelaw.com/attorney/dassow-robert-t/"],
-	["Nicholas C. Deets", "https://www.hovdelaw.com/attorney/deets-nicholas-c-nick/"],
-	["Frederick R. (Rick) Hovde", "https://www.hovdelaw.com/attorney/hovde-frederick-r-rick/"],
-	["Tyler Zipes", "https://www.hovdelaw.com/attorney/zipes-tyler/"],
-	["Quinn McCoy", "https://www.hovdelaw.com/attorney/mccoy-quinn/"],
-];
-
-const practiceAreas = [
-	["Vehicle accidents", "Car, truck, motorcycle and ATV collisions"],
-	["Medical malpractice", "Medication, surgical and birth injuries"],
-	["Workplace injuries", "Workers' compensation and job-site injuries"],
-	["Toxic exposures", "Cancer and long-term illness caused by toxic chemicals"],
-	["Other personal injury", "Nursing home abuse, premises liability and aviation injuries"],
-];
-
 export default function Home() {
-	const isAuthenticated = Boolean(localStorage.getItem("accessToken"));
+  const isAuthenticated = Boolean(localStorage.getItem("accessToken"));
 
-	return (
-		<main className="home-page">
-			<nav className="home-nav">
-				<Link className="home-brand" to="/">
-					<span className="home-brand-mark"><Gavel size={21} /></span>
-					<span>Hovde Dassow + Deets</span>
-				</Link>
-				<Link className="home-login-link" to={isAuthenticated ? "/dashboard" : "/login"}>
-					{isAuthenticated ? "Go to dashboard" : "Client sign in"}
-				</Link>
-			</nav>
+  return (
+    <main className="home-page">
+      <nav className="home-nav">
+        <Link className="home-brand" to="/">
+          <span className="home-brand-mark">
+            <Activity size={21} />
+          </span>
+          <span>Medical Misdiagnosis Risk Detector</span>
+        </Link>
 
-			<section className="home-hero">
-				<div className="home-hero-copy">
-					<p className="home-kicker"><span /> Indiana trial lawyers</p>
-					<h1>Fearless advocates for people and their families.</h1>
-					<p className="home-intro">At Hovde Dassow + Deets, we represent people who have been seriously injured or lost a loved one because of negligence, misconduct or corporate wrongdoing.</p>
-					<div className="home-actions">
-						<a className="home-primary-action" href="https://www.hovdelaw.com/case-results/">Explore our results <ArrowRight size={18} /></a>
-						<span className="home-trust"><ShieldCheck size={17} /> More than 100 years of collective experience</span>
-					</div>
-				</div>
+        <Link
+          className="home-login-link"
+          to={isAuthenticated ? "/dashboard" : "/login"}
+        >
+          {isAuthenticated ? "Go to Dashboard" : "Sign In"}
+        </Link>
+      </nav>
 
-				<div className="home-visual" aria-label="Hovde Dassow + Deets firm highlights">
-					<div className="visual-glow" />
-					<div className="preview-window">
-						<div className="preview-topbar"><span className="preview-dots"><i /><i /><i /></span><span>Firm overview</span><span className="preview-status">Established advocacy</span></div>
-						<div className="preview-body">
-							<div className="preview-heading"><div><small>HOVDE DASSOW + DEETS / ADVOCACY</small><h2>Results that create change</h2></div><span className="preview-date">Indiana</span></div>
-							<div className="preview-metrics"><div><small>Collective experience</small><strong>100+</strong><span>years</span></div><div><small>Cases over $1M</small><strong>100+</strong><span className="warm">in 10 years</span></div><div><small>Medical malpractice</small><strong>50+</strong><span className="blue">near statutory cap</span></div></div>
-							<div className="preview-chart firm-principles"><div className="chart-label"><span>What guides our work</span><small>People first</small></div><div className="principle-line"><span>Fearless advocacy</span><b>01</b></div><div className="principle-line"><span>Accountability</span><b>02</b></div><div className="principle-line"><span>Positive change</span><b>03</b></div></div>
-						</div>
-					</div>
-					<div className="floating-note"><span><Users size={17} /></span><div><strong>A team you can trust</strong><small>Trial advocates for Indiana families</small></div></div>
-				</div>
-			</section>
+      <section className="home-hero">
+        <div className="home-hero-copy">
+          <p className="home-kicker">
+            <span /> AI-Assisted Clinical Decision Support
+          </p>
 
-			<section className="home-content">
-				<div className="content-heading"><p className="home-kicker"><span /> The people behind the advocacy</p><h2>Experienced lawyers. <em>Personal commitment.</em></h2><p>Our attorneys are regularly recognized by their peers and leading legal organizations. Two partners are Past Presidents of the Indiana Trial Lawyers Association, three are members of the American College of Trial Lawyers and the International Academy of Trial Lawyers, and all partners have been recognized by Super Lawyers and Best Lawyers in America for more than a decade.</p></div>
-				<div className="attorney-list">{attorneys.map(([name, url]) => <a key={name} href={url}>{name}<ArrowRight size={15} /></a>)}</div>
-			</section>
+          <h1>
+            Detect potential
+            <em> misdiagnosis risk.</em>
+          </h1>
 
-			<section className="home-practice"><div className="practice-intro"><p className="home-kicker"><span /> How we help</p><h2>Zealously representing clients in personal injury matters.</h2><p>We handle the cases that change lives, from severe injuries and wrongful death to insurance misconduct and corporate wrongdoing.</p></div><div className="practice-list">{practiceAreas.map(([title, description]) => <div key={title}><HeartPulse size={18} /><div><strong>{title}</strong><span>{description}</span></div></div>)}</div></section>
-		</main>
-	);
+          <p className="home-intro">
+            A clinical decision-support platform designed to help identify
+            patterns and risk factors that may require additional medical
+            review.
+          </p>
+
+          <div className="home-actions">
+            <Link
+              className="home-primary-action"
+              to={isAuthenticated ? "/dashboard" : "/login"}
+            >
+              {isAuthenticated ? "Open Dashboard" : "Get Started"}
+              <ArrowRight size={18} />
+            </Link>
+
+            <span className="home-trust">
+              <ShieldCheck size={17} />
+              Designed for clinical decision support
+            </span>
+          </div>
+        </div>
+
+        <div className="home-visual">
+          <div className="visual-glow" />
+
+          <div className="preview-window">
+            <div className="preview-topbar">
+              <span className="preview-dots">
+                <i />
+                <i />
+                <i />
+              </span>
+              <span>Risk Analysis</span>
+              <span className="preview-status">AI Assisted</span>
+            </div>
+
+            <div className="preview-body">
+              <div className="preview-heading">
+                <div>
+                  <small>MEDICAL MISDIAGNOSIS RISK DETECTOR</small>
+                  <h2>Clinical Risk Overview</h2>
+                </div>
+                <span className="preview-date">Analysis</span>
+              </div>
+
+              <div className="preview-metrics">
+                <div>
+                  <small>Patient assessment</small>
+                  <strong>AI</strong>
+                  <span>assisted</span>
+                </div>
+
+                <div>
+                  <small>Risk factors</small>
+                  <strong>Review</strong>
+                  <span className="warm">recommended</span>
+                </div>
+
+                <div>
+                  <small>Clinical support</small>
+                  <strong>24/7</strong>
+                  <span className="blue">available</span>
+                </div>
+              </div>
+
+              <div className="preview-chart">
+                <div className="chart-label">
+                  <span>Clinical decision support</span>
+                  <small>Risk indicators</small>
+                </div>
+
+                <div className="risk-lines">
+                  <div>
+                    <span>Patient information</span>
+                    <b>01</b>
+                  </div>
+                  <div>
+                    <span>Clinical indicators</span>
+                    <b>02</b>
+                  </div>
+                  <div>
+                    <span>Potential risk factors</span>
+                    <b>03</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="floating-note">
+            <span>
+              <Brain size={17} />
+            </span>
+            <div>
+              <strong>AI-assisted analysis</strong>
+              <small>Supporting clinical review</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-features">
+        <div>
+          <Activity />
+          <strong>Risk Detection</strong>
+          <span>
+            Analyze patient information for potential misdiagnosis risk
+            indicators.
+          </span>
+        </div>
+
+        <div>
+          <Brain />
+          <strong>AI-Assisted Analysis</strong>
+          <span>
+            Use intelligent analysis to support healthcare decision-making.
+          </span>
+        </div>
+
+        <div>
+          <ShieldCheck />
+          <strong>Clinical Support</strong>
+          <span>
+            Provide an additional layer of information for professional
+            clinical review.
+          </span>
+        </div>
+      </section>
+
+      <section className="home-content">
+        <div className="content-heading">
+          <p className="home-kicker">
+            <span /> About the platform
+          </p>
+
+          <h2>
+            Supporting better
+            <em> clinical decisions.</em>
+          </h2>
+
+          <p>
+            The Medical Misdiagnosis Risk Detector is designed to help
+            healthcare professionals identify potential risk patterns and
+            support further clinical evaluation.
+          </p>
+        </div>
+
+        <div className="feature-list">
+          <div>
+            <strong>Patient assessment</strong>
+            <span>Enter and review relevant patient information.</span>
+          </div>
+
+          <div>
+            <strong>Risk analysis</strong>
+            <span>Evaluate factors that may indicate increased risk.</span>
+          </div>
+
+          <div>
+            <strong>Reports</strong>
+            <span>Review analysis results and generated reports.</span>
+          </div>
+
+          <div>
+            <strong>Patient history</strong>
+            <span>Access previous assessments when available.</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-practice">
+        <div className="practice-intro">
+          <p className="home-kicker">
+            <span /> Clinical workflow
+          </p>
+
+          <h2>From patient data to informed review.</h2>
+
+          <p>
+            Use the platform to organize patient information, analyze potential
+            risk indicators, and review the results as part of a broader
+            clinical workflow.
+          </p>
+        </div>
+
+        <div className="practice-list">
+          <div>
+            <Activity size={18} />
+            <div>
+              <strong>Patient Information</strong>
+              <span>Collect relevant clinical details.</span>
+            </div>
+          </div>
+
+          <div>
+            <Brain size={18} />
+            <div>
+              <strong>AI Analysis</strong>
+              <span>Analyze potential risk patterns.</span>
+            </div>
+          </div>
+
+          <div>
+            <ShieldCheck size={18} />
+            <div>
+              <strong>Clinical Review</strong>
+              <span>Use results as decision-support information.</span>
+            </div>
+          </div>
+
+          <div>
+            <ArrowRight size={18} />
+            <div>
+              <strong>Reports</strong>
+              <span>Review and manage assessment results.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 }
