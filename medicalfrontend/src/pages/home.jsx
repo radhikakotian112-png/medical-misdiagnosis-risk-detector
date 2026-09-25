@@ -1,4 +1,10 @@
-import { Activity, Brain, ShieldCheck, ArrowRight } from "lucide-react";
+import {
+  Activity,
+  ArrowRight,
+  Brain,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import "../home.css";
 
@@ -7,11 +13,13 @@ export default function Home() {
 
   return (
     <main className="home-page">
+      {/* Keep the old top navigation layout */}
       <nav className="home-nav">
         <Link className="home-brand" to="/">
           <span className="home-brand-mark">
             <Activity size={21} />
           </span>
+
           <span>Medical Misdiagnosis Risk Detector</span>
         </Link>
 
@@ -19,25 +27,29 @@ export default function Home() {
           className="home-login-link"
           to={isAuthenticated ? "/dashboard" : "/login"}
         >
-          {isAuthenticated ? "Go to Dashboard" : "Sign In"}
+          {isAuthenticated ? "Go to dashboard" : "Sign in"}
         </Link>
       </nav>
 
+      {/* HERO */}
       <section className="home-hero">
         <div className="home-hero-copy">
           <p className="home-kicker">
-            <span /> AI-Assisted Clinical Decision Support
+            <span />
+            AI-POWERED HEALTHCARE
           </p>
 
           <h1>
             Detect potential
-            <em> misdiagnosis risk.</em>
+            <br />
+            <em>misdiagnosis risks</em>
+            <br />
+            earlier.
           </h1>
 
           <p className="home-intro">
-            A clinical decision-support platform designed to help identify
-            patterns and risk factors that may require additional medical
-            review.
+            Analyze patient information and identify potential warning signs
+            that may require further clinical review.
           </p>
 
           <div className="home-actions">
@@ -45,18 +57,22 @@ export default function Home() {
               className="home-primary-action"
               to={isAuthenticated ? "/dashboard" : "/login"}
             >
-              {isAuthenticated ? "Open Dashboard" : "Get Started"}
+              Start risk assessment
               <ArrowRight size={18} />
             </Link>
 
             <span className="home-trust">
               <ShieldCheck size={17} />
-              Designed for clinical decision support
+              Designed to support clinical decision-making
             </span>
           </div>
         </div>
 
-        <div className="home-visual">
+        {/* PREVIEW */}
+        <div
+          className="home-visual"
+          aria-label="Medical risk assessment preview"
+        >
           <div className="visual-glow" />
 
           <div className="preview-window">
@@ -66,58 +82,66 @@ export default function Home() {
                 <i />
                 <i />
               </span>
-              <span>Risk Analysis</span>
-              <span className="preview-status">AI Assisted</span>
+
+              <span>Risk assessment</span>
+
+              <span className="preview-status">
+                AI analysis
+              </span>
             </div>
 
             <div className="preview-body">
               <div className="preview-heading">
                 <div>
-                  <small>MEDICAL MISDIAGNOSIS RISK DETECTOR</small>
-                  <h2>Clinical Risk Overview</h2>
+                  <small>MEDICAL RISK DETECTOR / ANALYSIS</small>
+
+                  <h2>Patient risk overview</h2>
                 </div>
-                <span className="preview-date">Analysis</span>
+
+                <span className="preview-date">
+                  Live
+                </span>
               </div>
 
               <div className="preview-metrics">
                 <div>
-                  <small>Patient assessment</small>
+                  <small>Risk indicators</small>
+                  <strong>03</strong>
+                  <span>detected</span>
+                </div>
+
+                <div>
+                  <small>Confidence</small>
+                  <strong>92%</strong>
+                  <span className="warm">analysis score</span>
+                </div>
+
+                <div>
+                  <small>Review status</small>
                   <strong>AI</strong>
-                  <span>assisted</span>
-                </div>
-
-                <div>
-                  <small>Risk factors</small>
-                  <strong>Review</strong>
-                  <span className="warm">recommended</span>
-                </div>
-
-                <div>
-                  <small>Clinical support</small>
-                  <strong>24/7</strong>
-                  <span className="blue">available</span>
+                  <span className="blue">requires review</span>
                 </div>
               </div>
 
-              <div className="preview-chart">
+              <div className="preview-chart firm-principles">
                 <div className="chart-label">
-                  <span>Clinical decision support</span>
-                  <small>Risk indicators</small>
+                  <span>Risk assessment</span>
+                  <small>Clinical review</small>
                 </div>
 
-                <div className="risk-lines">
-                  <div>
-                    <span>Patient information</span>
-                    <b>01</b>
-                  </div>
-                  <div>
-                    <span>Clinical indicators</span>
-                    <b>02</b>
-                  </div>
-                  <div>
-                    <span>Potential risk factors</span>
-                    <b>03</b>
-                  </div>
+                <div className="principle-line">
+                  <span>Symptom mismatch</span>
+                  <b>01</b>
+                </div>
+
+                <div className="principle-line">
+                  <span>Medication concerns</span>
+                  <b>02</b>
+                </div>
+
+                <div className="principle-line">
+                  <span>Diagnosis inconsistency</span>
+                  <b>03</b>
                 </div>
               </div>
             </div>
@@ -125,130 +149,123 @@ export default function Home() {
 
           <div className="floating-note">
             <span>
-              <Brain size={17} />
+              <Users size={17} />
             </span>
+
             <div>
-              <strong>AI-assisted analysis</strong>
-              <small>Supporting clinical review</small>
+              <strong>Patient safety first</strong>
+              <small>Additional clinical review support</small>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="home-features">
-        <div>
-          <Activity />
-          <strong>Risk Detection</strong>
-          <span>
-            Analyze patient information for potential misdiagnosis risk
-            indicators.
-          </span>
-        </div>
-
-        <div>
-          <Brain />
-          <strong>AI-Assisted Analysis</strong>
-          <span>
-            Use intelligent analysis to support healthcare decision-making.
-          </span>
-        </div>
-
-        <div>
-          <ShieldCheck />
-          <strong>Clinical Support</strong>
-          <span>
-            Provide an additional layer of information for professional
-            clinical review.
-          </span>
-        </div>
-      </section>
-
+      {/* FEATURES */}
       <section className="home-content">
         <div className="content-heading">
           <p className="home-kicker">
-            <span /> About the platform
+            <span />
+            HOW IT WORKS
           </p>
 
           <h2>
-            Supporting better
-            <em> clinical decisions.</em>
+            Smarter analysis.
+            <br />
+            <em>Safer decisions.</em>
           </h2>
 
           <p>
-            The Medical Misdiagnosis Risk Detector is designed to help
-            healthcare professionals identify potential risk patterns and
-            support further clinical evaluation.
+            The Medical Misdiagnosis Risk Detector analyzes available patient
+            information and highlights potential risk indicators for further
+            review.
           </p>
         </div>
 
-        <div className="feature-list">
+        <div className="attorney-list">
           <div>
-            <strong>Patient assessment</strong>
-            <span>Enter and review relevant patient information.</span>
+            <Brain size={20} />
+            <span>
+              <strong>AI-assisted analysis</strong>
+              <small>
+                Analyze patient information for potential warning signs.
+              </small>
+            </span>
           </div>
 
           <div>
-            <strong>Risk analysis</strong>
-            <span>Evaluate factors that may indicate increased risk.</span>
+            <Activity size={20} />
+            <span>
+              <strong>Risk detection</strong>
+              <small>
+                Identify patterns that may require additional attention.
+              </small>
+            </span>
           </div>
 
           <div>
-            <strong>Reports</strong>
-            <span>Review analysis results and generated reports.</span>
-          </div>
-
-          <div>
-            <strong>Patient history</strong>
-            <span>Access previous assessments when available.</span>
+            <ShieldCheck size={20} />
+            <span>
+              <strong>Clinical review support</strong>
+              <small>
+                Provide useful information to support professional review.
+              </small>
+            </span>
           </div>
         </div>
       </section>
 
+      {/* WORKFLOW */}
       <section className="home-practice">
         <div className="practice-intro">
           <p className="home-kicker">
-            <span /> Clinical workflow
+            <span />
+            SIMPLE WORKFLOW
           </p>
 
-          <h2>From patient data to informed review.</h2>
+          <h2>
+            From patient data
+            <br />
+            to risk insights.
+          </h2>
 
           <p>
-            Use the platform to organize patient information, analyze potential
-            risk indicators, and review the results as part of a broader
-            clinical workflow.
+            Enter the available patient information, run the analysis, and
+            review the identified risk indicators.
           </p>
         </div>
 
         <div className="practice-list">
           <div>
             <Activity size={18} />
+
             <div>
-              <strong>Patient Information</strong>
-              <span>Collect relevant clinical details.</span>
+              <strong>1. Enter patient information</strong>
+              <span>
+                Provide the available symptoms, diagnosis and relevant details.
+              </span>
             </div>
           </div>
 
           <div>
             <Brain size={18} />
+
             <div>
-              <strong>AI Analysis</strong>
-              <span>Analyze potential risk patterns.</span>
+              <strong>2. Run AI analysis</strong>
+              <span>
+                The system analyzes the information for potential risk signals.
+              </span>
             </div>
           </div>
 
           <div>
             <ShieldCheck size={18} />
-            <div>
-              <strong>Clinical Review</strong>
-              <span>Use results as decision-support information.</span>
-            </div>
-          </div>
 
-          <div>
-            <ArrowRight size={18} />
             <div>
-              <strong>Reports</strong>
-              <span>Review and manage assessment results.</span>
+              <strong>3. Review the results</strong>
+              <span>
+                Examine the identified indicators and determine whether further
+                professional review is appropriate.
+              </span>
             </div>
           </div>
         </div>
