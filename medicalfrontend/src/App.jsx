@@ -65,7 +65,7 @@ const showAppLayout =
     <div className="app">
 {showAppLayout && <Sidebar t={translations} />}
       <div className="main">
-        {showAppLayout && <Navbar t={translations} />} && <Navbar t={translations} />}
+    {showAppLayout && <Navbar t={translations} />}
 
         <div className="page-content">
           <Routes>
@@ -87,7 +87,7 @@ const showAppLayout =
 
             <Route
               path="/patient"
-              element={
+              elementf={
                 <ProtectedRoute>
                   <PatientForm />
                 </ProtectedRoute>
