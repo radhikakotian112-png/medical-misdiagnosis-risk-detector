@@ -10,6 +10,9 @@ from pathlib import Path
 from typing import Any
 
 import jwt
+from google.auth.exceptions import GoogleAuthError
+from google.auth.transport.requests import Request as GoogleAuthRequest
+from google.oauth2 import id_token
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -34,12 +37,12 @@ JWT_ALGORITHM = "HS256"
 ACCESS_TOKEN_MINUTES = int(os.getenv("ACCESS_TOKEN_MINUTES", "30"))
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@example.com").strip().lower()
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "ChangeMe123!")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "").strip()
 ALLOWED_ORIGINS = [
     origin.strip().rstrip("/")
     for origin in os.getenv(
         "ALLOWED_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173",
-    ).split(",")
+"http://localhost:5173,http://127.0.0.1:5173,https://medical-misdiagnosis-risk-detector-seven.vercel.app",    ).split(",")
     if origin.strip()
 ]
 
@@ -106,6 +109,12 @@ class LoginRequest(BaseModel):
 
 class RegisterRequest(LoginRequest):
     pass
+
+
+class GoogleLoginRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    credential: str = Field(min_length=1, max_length=10000)
 
 
 # Medical Prediction Models
@@ -176,6 +185,14 @@ def create_access_token(email: str) -> str:
     return jwt.encode({"sub": email, "exp": expires}, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 
+def user_summary(email: str) -> dict[str, str]:
+    normalized_email = email.strip().lower()
+    return {
+        "email": normalized_email,
+        "role": "admin" if normalized_email == ADMIN_EMAIL else "user",
+    }
+
+
 def require_user(
     credentials: HTTPAuthorizationCredentials | None = Depends(security),
 ) -> str:
@@ -189,6 +206,12 @@ def require_user(
         return email
     except (jwt.InvalidTokenError, ValueError):
         raise HTTPException(status_code=401, detail="Invalid or expired token", headers={"WWW-Authenticate": "Bearer"})
+
+
+def require_admin(email: str = Depends(require_user)) -> str:
+    if email.strip().lower() != ADMIN_EMAIL:
+        raise HTTPException(status_code=403, detail="Administrator access required")
+    return email
 
 
 def get_connection() -> sqlite3.Connection:
@@ -284,7 +307,7 @@ def login(credentials: LoginRequest):
         ).fetchone()
     if not user or not verify_password(credentials.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid email or password", headers={"WWW-Authenticate": "Bearer"})
-    return {"access_token": create_access_token(user["email"]), "token_type": "bearer", "user": {"email": user["email"]}}
+    return {"access_token": create_access_token(user["email"]), "token_type": "bearer", "user": user_summary(user["email"])}
 
 
 @app.post("/api/auth/register", status_code=status.HTTP_201_CREATED)
@@ -301,7 +324,71 @@ def register(credentials: RegisterRequest):
     except sqlite3.IntegrityError:
         raise HTTPException(status_code=409, detail="An account with this email already exists")
 
-    return {"access_token": create_access_token(email), "token_type": "bearer", "user": {"email": email}}
+    return {"access_token": create_access_token(email), "token_type": "bearer", "user": user_summary(email)}
+
+
+@app.post("/api/auth/google")
+def google_login(credentials: GoogleLoginRequest):
+    if not GOOGLE_CLIENT_ID:
+        raise HTTPException(status_code=503, detail="Google sign-in is not configured")
+
+    try:
+        claims = id_token.verify_oauth2_token(
+            credentials.credential, GoogleAuthRequest(), GOOGLE_CLIENT_ID
+        )
+    except (ValueError, GoogleAuthError):
+        raise HTTPException(status_code=401, detail="Invalid Google credential")
+
+    email = claims.get("email")
+    if not claims.get("email_verified") or not isinstance(email, str):
+        raise HTTPException(status_code=401, detail="A verified Google email is required")
+    email = email.strip().lower()
+    if not email:
+        raise HTTPException(status_code=401, detail="A verified Google email is required")
+
+    with get_connection() as connection:
+        connection.execute(
+            "INSERT OR IGNORE INTO users (email, password_hash, created_at) VALUES (?, ?, ?)",
+            (
+                email,
+                hash_password(secrets.token_urlsafe(32)),
+                datetime.now(timezone.utc).isoformat(),
+            ),
+        )
+
+    return {
+        "access_token": create_access_token(email),
+        "token_type": "bearer",
+        "user": user_summary(email),
+    }
+
+
+@app.get("/api/admin/overview")
+def get_admin_overview(_: str = Depends(require_admin)):
+    with get_connection() as connection:
+        users = connection.execute(
+            "SELECT email, created_at FROM users ORDER BY created_at DESC"
+        ).fetchall()
+        assessment_count = connection.execute(
+            "SELECT COUNT(*) AS count FROM patient_assessments"
+        ).fetchone()["count"]
+        document_count = connection.execute(
+            "SELECT COUNT(*) AS count FROM medical_documents"
+        ).fetchone()["count"]
+
+    return {
+        "userCount": len(users),
+        "assessmentCount": assessment_count,
+        "documentCount": document_count,
+        "users": [
+            {
+                "email": row["email"],
+                "role": user_summary(row["email"])["role"],
+                "createdAt": row["created_at"],
+            }
+            for row in users
+        ],
+    }
 
 
 @app.post("/api/documents", status_code=status.HTTP_201_CREATED)

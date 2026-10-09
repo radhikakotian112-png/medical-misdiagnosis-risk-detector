@@ -55,6 +55,65 @@ def test_anyone_can_register_with_a_different_email(tmp_path, monkeypatch):
     ).status_code == 409
 
 
+def test_admin_overview_is_forbidden_to_regular_users(tmp_path, monkeypatch):
+    setup_test_database(tmp_path, monkeypatch)
+
+    admin_token = login()
+    registered = client.post(
+        "/api/auth/register",
+        json={"email": "staff@example.com", "password": "SecurePass123!"},
+    )
+    user_token = registered.json()["access_token"]
+
+    admin_response = client.get(
+        "/api/admin/overview",
+        headers={"Authorization": f"Bearer {admin_token}"},
+    )
+    assert admin_response.status_code == 200
+    assert admin_response.json()["userCount"] == 2
+    assert {user["email"] for user in admin_response.json()["users"]} == {
+        "admin@example.com",
+        "staff@example.com",
+    }
+
+    user_response = client.get(
+        "/api/admin/overview",
+        headers={"Authorization": f"Bearer {user_token}"},
+    )
+    assert user_response.status_code == 403
+
+
+def test_admin_overview_requires_authentication(tmp_path, monkeypatch):
+    setup_test_database(tmp_path, monkeypatch)
+
+    assert client.get("/api/admin/overview").status_code == 401
+
+
+def test_google_login_provisions_verified_account(tmp_path, monkeypatch):
+    setup_test_database(tmp_path, monkeypatch)
+    monkeypatch.setattr(main, "GOOGLE_CLIENT_ID", "test-client-id")
+    monkeypatch.setattr(
+        main.id_token,
+        "verify_oauth2_token",
+        lambda credential, request, audience: {
+            "email": "Google.User@example.com",
+            "email_verified": True,
+        },
+    )
+
+    response = client.post("/api/auth/google", json={"credential": "google-token"})
+
+    assert response.status_code == 200
+    assert response.json()["user"] == {
+        "email": "google.user@example.com",
+        "role": "user",
+    }
+    token = response.json()["access_token"]
+    assert client.get(
+        "/api/patients", headers={"Authorization": f"Bearer {token}"}
+    ).status_code == 200
+
+
 def test_patient_routes_require_valid_jwt(tmp_path, monkeypatch):
     setup_test_database(tmp_path, monkeypatch)
 
